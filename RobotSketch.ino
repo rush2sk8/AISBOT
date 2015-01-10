@@ -13,9 +13,13 @@ int IN2 = 6;
 
 int pos=0;
 char serialA;
+char serialB;
+String str = "";
 
 void setup(){
   Genotronex.begin(9600);
+  Serial.begin(9600);
+
   pinMode(IN1, OUTPUT);
   pinMode(IN2, OUTPUT);
   pinMode(trigPinFront, OUTPUT);
@@ -28,8 +32,13 @@ void setup(){
 
 void loop(){
   while(Genotronex.available() > 0) {
-    serialA = Genotronex.read();
 
+    serialA = Genotronex.read();
+    //    if(serialA == '#') {
+    //      break;
+    //    }
+    //    str += serialA;
+    //  }
     if(serialA == '1'){ //stop
       steering.write(90);
       eyefront.write(90);
@@ -84,8 +93,43 @@ void loop(){
 
       Genotronex.println(distance);
     }
+
+    // f&20#
     else if(serialA == 'f'){
-      serialB = Genotronex.read();
-      eyefront.write(serialB);
+      while(true){
+        char c = Genotronex.read();
+        Serial.println((int)c);
+        if(c == '&'){
+          break;
+        }
+        else if(((int)c)!=-1){
+          str += c;
+        }
+        delay(50);
+      }
+      Serial.println(str);
+      int x = str.toInt();
+      Serial.println(x);
+      eyefront.write(x);
+      str="";
+    }
+    else if(serialA == 'b'){
+      while(true){
+        char c = Genotronex.read();
+        Serial.println((int)c);
+        if(c == '&'){
+          break;
+        }
+        else if(((int)c)!=-1){
+          str += c;
+        }
+        delay(50);
+      }
+      Serial.println(str);
+      int x = str.toInt();
+      Serial.println(x);
+      eyeback.write(x);
+      str="";
+    }
   }
 }
