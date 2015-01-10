@@ -94,7 +94,7 @@ void loop(){
       Genotronex.println(distance);
     }
 
-    // f&20#
+    // f100&
     else if(serialA == 'f'){
       while(true){
         char c = Genotronex.read();
@@ -113,6 +113,7 @@ void loop(){
       eyefront.write(x);
       str="";
     }
+    //b100&
     else if(serialA == 'b'){
       while(true){
         char c = Genotronex.read();
