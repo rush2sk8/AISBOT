@@ -1,7 +1,9 @@
 #include <Servo.h>
 #include <SoftwareSerial.h>
 #define trigPinFront 13
-#define echoPinFront 12
+#define echoPinFront 12    //For Front Ultrasonic
+#define trigPinBack 3
+#define echoPinBack 5
 
 SoftwareSerial Genotronex(10,11); //RX, TX
 Servo steering;
@@ -24,6 +26,8 @@ void setup(){
   pinMode(IN2, OUTPUT);
   pinMode(trigPinFront, OUTPUT);
   pinMode(echoPinFront, INPUT);
+  pinMode(trigPinBack, OUTPUT);
+  pinMode(trigPinFront, INPUT);
   steering.attach(4);
   eyefront.attach(2);
   eyeback.attach(8);
@@ -89,6 +93,17 @@ void loop(){
       digitalWrite(trigPinFront, LOW);
 
       duration = pulseIn(echoPinFront, HIGH);
+      distance = (duration/2)/29.1;
+
+      Genotronex.println(distance);
+    }
+    else if(serialA == '9'){
+      int duration, distance;
+      digitalWrite(trigPinBack, HIGH);
+      delay(50);
+      digitalWrite(trigPinBack, LOW);
+
+      duration = pulseIn(echoPinBack, HIGH);
       distance = (duration/2)/29.1;
 
       Genotronex.println(distance);
